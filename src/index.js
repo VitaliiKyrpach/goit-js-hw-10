@@ -13,7 +13,7 @@ select.hidden = true;
 
 fetchBreeds()
   .then(data => {
-    loader.classList.toggle('is-hidden');
+    loader.classList.add('is-hidden');
     select.hidden = false;
     select.insertAdjacentHTML('beforeend', createSelectMarkup(data));
     new SlimSelect({
@@ -21,14 +21,10 @@ fetchBreeds()
       settings: {
         placeholderText: 'Select a cat',
       },
-      // events: {
-      //   afterChange: newVal => {
-      //     console.log(newVal);
-      //   },
-      // },
     });
   })
   .catch(error => {
+    loader.classList.add('is-hidden');
     Notify.failure(errorMessage.textContent);
     console.log(error);
   });
@@ -41,14 +37,15 @@ function createSelectMarkup(arr) {
 }
 select.addEventListener('change', onChange);
 function onChange() {
-  catCard.classList.toggle('is-hidden');
+  catCard.classList.add('is-hidden');
   fetchCatByBreed(select.value)
     .then(catInfo => {
-      loader.classList.toggle('is-hidden');
-      catCard.classList.toggle('is-hidden');
+      loader.classList.add('is-hidden');
+      catCard.classList.remove('is-hidden');
       catCard.innerHTML = createMarkup(catInfo);
     })
     .catch(error => {
+      loader.classList.add('is-hidden');
       Notify.failure(errorMessage.textContent);
       console.log(error);
     });
